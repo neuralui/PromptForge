@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptForge - 极简 AI 提示词增强与大模型导航</title>
+  <!-- 引入 Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- 顶部导航栏 -->
+  <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-lg shadow-lg shadow-indigo-500/30">P</div>
+        <span class="font-bold text-lg tracking-wide bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">PromptForge</span>
+      </div>
+      <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800/50">v1.0 Pro</span>
+    </div>
+  </header>
+
+  <!-- 主体内容区 -->
+  <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow space-y-6">
+    
+    <!-- 标语区 -->
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">让灵感瞬间转化为高阶 AI 提示词</h1>
+      <p class="text-slate-400 text-sm sm:text-base">一键智能扩展，直达全球主流大模型官网</p >
+    </div>
+
+    <!-- 用户原始输入卡片 -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+      <label for="userInput" class="block text-sm font-medium text-slate-300">💡 你的核心需求或关键词：</label>
+      <textarea id="userInput" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm transition" placeholder="例如：帮我写一个 A 股量化交易的选股策略..."></textarea>
+      <button onclick="enhancePrompt()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 font-medium rounded-xl text-sm transition shadow-lg shadow-indigo-600/20 cursor-pointer">
+        ✨ 一键智能增强 Prompt
+      </button>
+    </div>
+
+    <!-- 增强后输出卡片 -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+      <label for="enhancedOutput" class="block text-sm font-medium text-slate-300">🚀 生成的高阶提示词：</label>
+      <textarea id="enhancedOutput" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-cyan-300 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm font-mono transition" placeholder="点击上方按钮后在此生成结构化提示词..."></textarea>
+      
+      <!-- 目标模型选择与操作栏 -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+        <select id="modelSelect" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500">
+          <option value="deepseek" data-url="https://chat.deepseek.com">DeepSeek 官网</option>
+          <option value="chatgpt" data-url="https://chatgpt.com">ChatGPT 官网</option>
+          <option value="claude" data-url="https://claude.ai">Claude 官网</option>
+          <option value="kimi" data-url="https://kimi.moonshot.cn">Kimi 智能助手</option>
+        </select>
+        
+        <button onclick="copyPrompt()" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-slate-200 font-medium rounded-xl text-sm py-2.5 transition border border-slate-700 cursor-pointer">
+          📋 仅复制 Prompt
+        </button>
+
+        <button onclick="copyAndRedirect()" class="bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 active:opacity-90 font-medium rounded-xl text-sm py-2.5 transition shadow-lg shadow-cyan-600/20 cursor-pointer">
+          ⚡ 复制并直达
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
+    PromptForge &copy; 2026 - Designed for High Efficiency
+  </footer>
+
+  <!-- 核心逻辑脚本 -->
+  <script>
+    function enhancePrompt() {
+      const input = document.getElementById('userInput').value.trim();
+      const output = document.getElementById('enhancedOutput');
+      
+      if (!input) {
+        alert('请先输入您的核心需求或关键词！');
+        return;
+      }
+
+      // 智能结构化模板包装
+      const structuredPrompt = `你是一位精通系统设计与行业落地的资深专家。请基于以下用户需求，输出高水准、具备强执行力的深度解析与执行方案：\n\n【核心需求】：${input}\n\n请按以下逻辑输出：\n1. 核心目标与架构设计思路\n2. 关键技术细节与执行步骤\n3. 潜在风险规避与校验标准`;
+      
+      output.value = structuredPrompt;
+    }
+
+    function copyPrompt() {
+      const output = document.getElementById('enhancedOutput');
+      if (!output.value) {
+        alert('请先生成 Prompt！');
+        return;
+      }
+      navigator.clipboard.writeText(output.value).then(() => {
+        alert('Prompt 已成功复制到剪贴板！');
+      });
+    }
+
+    function copyAndRedirect() {
+      const output = document.getElementById('enhancedOutput');
+      if (!output.value) {
+        alert('请先生成 Prompt！');
+        return;
+      }
+      
+      const select = document.getElementById('modelSelect');
+      const url = select.options[select.selectedIndex].getAttribute('data-url');
+
+      // 同步写入剪贴板并立即实现当前页面直达跳转
+      try {
+        navigator.clipboard.writeText(output.value);
+      } catch (e) {
+        console.log('剪贴板写入备用方案执行');
+      }
+
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>
